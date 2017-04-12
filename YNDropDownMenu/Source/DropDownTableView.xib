@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="YNTableViewDropDownView" customModule="expertSay" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="s7F-ko-P3s">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                </tableView>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TMD-im-IfJ">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                    <color key="backgroundColor" red="0.78431372549019607" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="S1G-bU-mPb">
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="preciseConstant">
+                                    <integer key="value" value="1"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </constraint>
+                    </constraints>
+                </view>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IndicatorTriangle" translatesAutoresizingMaskIntoConstraints="NO" id="YI3-Cd-GfE">
+                    <rect key="frame" x="0.0" y="-4" width="10" height="5"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="5" id="XsF-3E-31J"/>
+                        <constraint firstAttribute="width" constant="10" id="cMI-sb-Iyy"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="YI3-Cd-GfE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="1A1-dg-VOJ"/>
+                <constraint firstItem="s7F-ko-P3s" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="2pA-0T-7nI"/>
+                <constraint firstItem="TMD-im-IfJ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Kcz-HI-HnG"/>
+                <constraint firstItem="TMD-im-IfJ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="TqE-ve-zSg"/>
+                <constraint firstAttribute="trailing" secondItem="TMD-im-IfJ" secondAttribute="trailing" id="Xfa-X2-JNS"/>
+                <constraint firstItem="s7F-ko-P3s" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="dKY-Lh-OJg"/>
+                <constraint firstItem="TMD-im-IfJ" firstAttribute="top" secondItem="YI3-Cd-GfE" secondAttribute="bottom" constant="-1" id="fZh-xz-k1d"/>
+                <constraint firstAttribute="trailing" secondItem="s7F-ko-P3s" secondAttribute="trailing" id="fek-4x-MDC"/>
+                <constraint firstAttribute="bottom" secondItem="s7F-ko-P3s" secondAttribute="bottom" id="tSz-tZ-96q"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="indicatorLeadingConstraint" destination="1A1-dg-VOJ" id="TFx-6W-wFu"/>
+                <outlet property="tableView" destination="s7F-ko-P3s" id="PU5-GP-Q8v"/>
+            </connections>
+        </view>
+    </objects>
+    <resources>
+        <image name="IndicatorTriangle" width="12" height="6"/>
+    </resources>
+</document>

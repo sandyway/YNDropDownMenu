@@ -25,6 +25,8 @@
 		19162D141E6AA4DE00047D46 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 19162D111E6AA4DE00047D46 /* README.md */; };
 		19162D151E6AA4DE00047D46 /* YNDropDownMenu.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 19162D121E6AA4DE00047D46 /* YNDropDownMenu.podspec */; };
 		199C67831E89697A00F4C297 /* YNDropDownMenuUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199C67751E89688E00F4C297 /* YNDropDownMenuUITests.swift */; };
+		83D10E9C1E9DCABB00BB688D /* DropDownTableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83D10E9A1E9DCABB00BB688D /* DropDownTableView.xib */; };
+		83D10E9D1E9DCABB00BB688D /* YNTableViewDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D10E9B1E9DCABB00BB688D /* YNTableViewDropDownView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,8 @@
 		199C67751E89688E00F4C297 /* YNDropDownMenuUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YNDropDownMenuUITests.swift; sourceTree = "<group>"; };
 		199C67771E89688E00F4C297 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		19D092FA1E6A8A30008E7695 /* YNDropDownMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YNDropDownMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		83D10E9A1E9DCABB00BB688D /* DropDownTableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropDownTableView.xib; sourceTree = "<group>"; };
+		83D10E9B1E9DCABB00BB688D /* YNTableViewDropDownView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YNTableViewDropDownView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +120,8 @@
 		19162D0F1E6AA4CF00047D46 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				83D10E9A1E9DCABB00BB688D /* DropDownTableView.xib */,
+				83D10E9B1E9DCABB00BB688D /* YNTableViewDropDownView.swift */,
 				19162D101E6AA4DE00047D46 /* CHANGELOG.md */,
 				19162D111E6AA4DE00047D46 /* README.md */,
 				19162D121E6AA4DE00047D46 /* YNDropDownMenu.podspec */,
@@ -248,6 +254,7 @@
 				19162D051E6AA0E000047D46 /* Images.xcassets in Resources */,
 				19162D061E6AA0E000047D46 /* IMG_2279.PNG in Resources */,
 				19162D021E6AA0E000047D46 /* Main.storyboard in Resources */,
+				83D10E9C1E9DCABB00BB688D /* DropDownTableView.xib in Resources */,
 				19162D041E6AA0E000047D46 /* DropDownViews.xib in Resources */,
 				19162D151E6AA4DE00047D46 /* YNDropDownMenu.podspec in Resources */,
 			);
@@ -278,6 +285,7 @@
 				19162D0E1E6AA0E000047D46 /* YNDropDownView.swift in Sources */,
 				19162D0C1E6AA0E000047D46 /* YNDropDownMenu.swift in Sources */,
 				19162D141E6AA4DE00047D46 /* README.md in Sources */,
+				83D10E9D1E9DCABB00BB688D /* YNTableViewDropDownView.swift in Sources */,
 				19162D031E6AA0E000047D46 /* DropDownViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
