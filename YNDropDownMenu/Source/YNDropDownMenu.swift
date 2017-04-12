@@ -22,6 +22,10 @@ public enum YNStatus {
 
 /// Main Class for YNDropDownMenu
 open class YNDropDownMenu: UIView, YNDropDownDelegate {
+    static let kScreenScaleHeight = 1.0 / UIScreen.main.scale
+    open static var indicatorImageName = "IndicatorTriangle"
+    internal var indicatorImageView: UIImageView?
+    
     internal var opened: Bool = false
     internal var openedIndex: Int = 0
     
@@ -135,8 +139,8 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
      - Parameter selected: Selected image
      - Parameter disabled: Disabled image
      */
-    open func setImageWhen(normal: UIImage?, selected: UIImage?, disabled: UIImage?) {
-        self.buttonImages = YNImages.init(normal: normal, selected: selected, disabled: disabled)
+    open func setImageWhen(normal: UIImage?, selected: UIImage?, disabled: UIImage?, alwaysSelected: UIImage?) {
+        self.buttonImages = YNImages.init(normal: normal, selected: selected, disabled: disabled, alwaysSelected: alwaysSelected ?? selected)
         
         for i in 0..<numberOfMenu {
             dropDownButtons?[i].buttonImages = self.buttonImages
@@ -150,8 +154,8 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
      - Parameter selected: Selected color
      - Parameter disabled: Disabled color
      */
-    open func setLabelColorWhen(normal: UIColor, selected: UIColor, disabled: UIColor) {
-        self.buttonlabelFontColors = YNFontColor.init(normal: normal, selected: selected, disabled: disabled)
+    open func setLabelColorWhen(normal: UIColor, selected: UIColor, disabled: UIColor, alwaysSelected: UIColor?) {
+        self.buttonlabelFontColors = YNFontColor.init(normal: normal, selected: selected, disabled: disabled, alwaysSelected: alwaysSelected ?? selected)
         
         for i in 0..<numberOfMenu {
             dropDownButtons?[i].labelFontColors = self.buttonlabelFontColors
@@ -198,8 +202,9 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
             self.alwaysOnIndex?.append(index)
         }
         
-        dropDownButtons?[index].buttonLabel.textColor = self.buttonlabelFontColors?.selected
+        dropDownButtons?[index].buttonLabel.textColor = self.buttonlabelFontColors?.alwaysSelected
         dropDownButtons?[index].buttonLabel.font = self.buttonlabelFonts?.selected
+        dropDownButtons?[index].buttonImageView.image = self.buttonImages?.alwaysSelected        
     }
     
     /**
@@ -220,6 +225,7 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
         
         dropDownButtons?[index].buttonLabel.textColor = self.buttonlabelFontColors?.normal
         dropDownButtons?[index].buttonLabel.font = self.buttonlabelFonts?.normal
+        dropDownButtons?[index].buttonImageView.image = self.buttonImages?.normal
     }
     
     /**
@@ -347,6 +353,13 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
             let yNDropDownButton = yNDropDownButton,
             let dropDownView = dropDownView else { return }
         
+        indicatorImageView?.isHidden = false
+        if let indicatorImageView = indicatorImageView {
+            var frame = indicatorImageView.frame
+            let eachWidth = self.bounds.size.width / CGFloat(numberOfMenu)
+            frame.origin.x = (CGFloat(openedIndex) + 0.5) * eachWidth - (frame.width / 2)
+            indicatorImageView.frame = frame
+        }
         dropDownView.isHidden = false
 
         self.addSubview(dropDownView)
@@ -386,6 +399,7 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
             let yNDropDownButton = yNDropDownButton,
             let dropDownView = dropDownView else { return }
         
+        indicatorImageView?.isHidden = true
         (dropDownView as? YNDropDownView)?.dropDownViewClosed()
 
         UIView.animate(
@@ -400,13 +414,16 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
                     self.blurEffectView?.alpha = 0
                 }
                 self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: CGFloat(self.menuHeight))
+                
+                let isAlwaysOnBtn = self.alwaysOnIndex != nil
+                    && self.alwaysOnIndex?.contains(yNDropDownButton.tag) ?? false
+                
                 if let _buttonImageView = buttonImageView {
                     _buttonImageView.layer.transform = CATransform3DMakeRotation(CGFloat(Double.pi), 0.0, 0.0, 0.0);
-                    _buttonImageView.image = self.buttonImages?.normal
+                    _buttonImageView.image = isAlwaysOnBtn ? self.buttonImages?.alwaysSelected : self.buttonImages?.normal
                 }
                 
-                guard let alwaysOnIndex = self.alwaysOnIndex else { return }
-                if !alwaysOnIndex.contains(yNDropDownButton.tag) {
+                if !isAlwaysOnBtn {
                     yNDropDownButton.buttonLabel.textColor = self.buttonlabelFontColors?.normal
                     yNDropDownButton.buttonLabel.font = self.buttonlabelFonts?.normal
                 }
@@ -453,10 +470,22 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
             }
         }
         
-        self.bottomLine = UIView(frame: CGRect(x: 0, y: CGFloat(menuHeight) - 0.5, width: self.frame.width, height: 0.5))
-        self.bottomLine.backgroundColor = UIColor(colorLiteralRed: 225/255, green: 225/255, blue: 225/255, alpha: 1.0)
-        self.bottomLine.isHidden = true
+        
+        self.bottomLine = UIView(frame: CGRect(x: 0, y: CGFloat(menuHeight), width: self.frame.width, height: YNDropDownMenu.kScreenScaleHeight))
+        self.bottomLine.backgroundColor = UIColor(red: 200.0/255, green: 199.0/255, blue: 204.0/255, alpha: 1.0)
+        self.bottomLine.isHidden = false
         self.addSubview(self.bottomLine)
+        
+        if let indicatorImage = UIImage(named: YNDropDownMenu.indicatorImageName) {
+            indicatorImageView = UIImageView(image: indicatorImage)
+            indicatorImageView?.isHidden = true
+            indicatorImageView?.frame = CGRect(x: 0
+                , y: bottomLine.frame.height - indicatorImage.size.height
+                , width: indicatorImage.size.width
+                , height: indicatorImage.size.height)
+            bottomLine.addSubview(indicatorImageView!)
+        }
+        
         
         let blurEffect = UIBlurEffect(style: blurEffectStyle)
         self.blurEffectView = UIVisualEffectView(effect: blurEffect)

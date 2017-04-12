@@ -18,6 +18,8 @@ struct YNImages {
     
     /// Disabled UIImage
     var disabled: UIImage?
+    
+    var alwaysSelected: UIImage?
 }
 
 /// Setting 3 status UIColor
@@ -30,6 +32,8 @@ struct YNFontColor {
     
     /// Disabled UIColor
     var disabled: UIColor?
+    
+    var alwaysSelected: UIColor?
 }
 
 /// Setting 3 status UIFont

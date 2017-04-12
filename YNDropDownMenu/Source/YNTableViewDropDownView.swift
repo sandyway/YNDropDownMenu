@@ -9,20 +9,19 @@
 import Foundation
 import UIKit
 
-class YNTableViewDropDownView: YNDropDownView {
-    @IBOutlet weak var tableView: UITableView!
+open class YNTableViewDropDownView: YNDropDownView {
+    @IBOutlet public weak var tableView: UITableView!
     @IBOutlet weak var indicatorLeadingConstraint: NSLayoutConstraint!
-    var data = [String]()
-    var didSelectRow: ((IndexPath) -> Void)?
-    var selectedIndex = 0
-    var menuIndex = 0
+    public var data = [String]()
+    public var didSelectRow: ((IndexPath) -> Void)?
+    public var selectedIndex = 0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
 //        self.backgroundColor = UIColor.white
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
 //        self.initViews()
@@ -59,7 +58,7 @@ class YNTableViewDropDownView: YNDropDownView {
         }
     }
     
-    override func awakeFromNib() {
+    override open func awakeFromNib() {
         super.awakeFromNib()
         tableView.dataSource = self
         tableView.delegate = self
@@ -68,27 +67,27 @@ class YNTableViewDropDownView: YNDropDownView {
     
     
     // override method to call open & close
-    override func dropDownViewOpened() {
-        print("dropDownViewOpened")
+    override open func dropDownViewOpened() {
+//        print("dropDownViewOpened")
         
     }
     
-    override func dropDownViewClosed() {
-        print("dropDownViewClosed")
+    override open func dropDownViewClosed() {
+//        print("dropDownViewClosed")
     }
 }
 
 extension YNTableViewDropDownView: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()// tableView.dequeueReusableCell(withIdentifier: "DropDownMenuTableViewCell", for: indexPath)
         return cell
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let textColor = indexPath.row == selectedIndex ? hexToColor(hexString: "4A90E2") : UIColor.black
         cell.textLabel?.textColor = textColor
         
@@ -104,7 +103,7 @@ extension YNTableViewDropDownView: UITableViewDelegate, UITableViewDataSource {
     
     
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         changeSelectedCellTextColor("000000")
         selectedIndex = indexPath.row
