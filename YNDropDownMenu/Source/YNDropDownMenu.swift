@@ -20,8 +20,16 @@ public enum YNStatus {
     case disabled
 }
 
+public protocol YNDropDownMenuDelegate: class {
+    
+    func didSelectMenuIndex(index: Int)
+}
+
 /// Main Class for YNDropDownMenu
 open class YNDropDownMenu: UIView, YNDropDownDelegate {
+    
+    public var delegate: YNDropDownMenuDelegate?
+    
     static let kScreenScaleHeight = 1.0 / UIScreen.main.scale
     open static var indicatorImageName = "IndicatorTriangle"
     internal var indicatorImageView: UIImageView?
@@ -71,7 +79,7 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
     open var showMenuDuration = 0.5
     
     /// Hide menu second default value: *0.3*
-    open var hideMenuDuration = 0.3
+    open var hideMenuDuration = 0.4
     
     /// Show menu spring velocity default value: *0.5*
     open var showMenuSpringVelocity:CGFloat = 0.5
@@ -87,6 +95,17 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
     
     /// Bottom 0.5px line
     open var bottomLine: UIView!
+    
+    public init(frame: CGRect, dropDownViewTitles: [String]) {
+
+        super.init(frame: frame)
+        self.numberOfMenu = dropDownViewTitles.count
+        self.dropDownViewTitles = dropDownViewTitles
+        self.menuHeight = self.frame.height
+        
+        self.initViews()
+    }
+    
     /**
      Init YNDropDownMenu with frame, views, strings. Views count and titles count should be same
      
@@ -316,6 +335,8 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
     open func showAndHideMenu(at index: Int) {
         self.checkIndex(index: index)
         
+        delegate?.didSelectMenuIndex(index: index)
+        
         if openedIndex != index && opened {
             hideMenu(yNDropDownButton: dropDownButtons?[openedIndex], buttonImageView: dropDownButtons?[openedIndex].buttonImageView, dropDownView: dropDownViews?[openedIndex], didComplete: {
                 self.showMenu(yNDropDownButton: self.dropDownButtons?[index], buttonImageView: self.dropDownButtons?[index].buttonImageView, dropDownView: self.dropDownViews?[index], didComplete: nil)
@@ -336,6 +357,12 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
     
     @objc internal func menuClicked(_ sender: YNDropDownButton) {
         self.showAndHideMenu(at: sender.tag)
+    }
+    
+    open func selectMenuIndex(index: Int) {
+        if let sender = dropDownButtons?[index] {
+            sender.sendActions(for: UIControlEvents.touchUpInside)
+        }
     }
     
     @objc internal func blurEffectViewClicked(_ sender: UITapGestureRecognizer) {
@@ -361,15 +388,20 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
             indicatorImageView.frame = frame
         }
         dropDownView.isHidden = false
-
-        self.addSubview(dropDownView)
-        self.sendSubview(toBack: dropDownView)
+        
+        if dropDownView.superview == nil {
+            self.addSubview(dropDownView)
+            self.sendSubview(toBack: dropDownView)
+        }
+        
+//        print(subviews)
         
         (dropDownView as? YNDropDownView)?.dropDownViewOpened()
         
         if self.backgroundBlurEnabled, let _blurEffectView = blurEffectView {
             self.superview?.insertSubview(_blurEffectView, belowSubview: self)
         }
+        
         UIView.animate(
             withDuration: self.showMenuDuration,
             delay: 0,
@@ -377,11 +409,17 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
             initialSpringVelocity: self.showMenuSpringVelocity,
             options: [],
             animations: {
+                // 同时改变父控件和子控件的frame时, 要先改变父控件的frame, 不然会导致子控件的frame不对
+                let finalHeight = dropDownView.frame.height + CGFloat(self.menuHeight)
+                self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: finalHeight)
                 dropDownView.frame.origin.y = CGFloat(self.menuHeight)
+                // 在原来的基础上, 还需要改变height(维持原高度), 会导致dropDownView的高度不对
+                dropDownView.frame.size.height = finalHeight - CGFloat(self.menuHeight)
+                
                 if self.backgroundBlurEnabled {
                     self.blurEffectView?.alpha = self.blurEffectViewAlpha
                 }
-                self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: dropDownView.frame.height + CGFloat(self.menuHeight))
+                
                 if let _buttonImageView = buttonImageView {
                     _buttonImageView.layer.transform = CATransform3DMakeRotation(CGFloat(Double.pi), 1.0, 0.0, 0.0)
                     _buttonImageView.image = self.buttonImages?.selected
@@ -401,7 +439,8 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
         
         indicatorImageView?.isHidden = true
         (dropDownView as? YNDropDownView)?.dropDownViewClosed()
-
+        
+        
         UIView.animate(
             withDuration: self.hideMenuDuration,
             delay: 0,
@@ -409,11 +448,16 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
             initialSpringVelocity: self.hideMenuSpringVelocity,
             options: [],
             animations: {
-                dropDownView.frame.origin.y = CGFloat(self.menuHeight)
+                
+                let originalHeight = dropDownView.frame.size.height
+                self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: CGFloat(self.menuHeight))
+                dropDownView.frame.origin.y = -originalHeight + CGFloat(self.menuHeight)
+                dropDownView.frame.size.height = originalHeight
+                
                 if self.backgroundBlurEnabled {
                     self.blurEffectView?.alpha = 0
                 }
-                self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: CGFloat(self.menuHeight))
+                
                 
                 let isAlwaysOnBtn = self.alwaysOnIndex != nil
                     && self.alwaysOnIndex?.contains(yNDropDownButton.tag) ?? false
@@ -445,6 +489,18 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
         self.blurEffectView?.alpha = 0
     }
     
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        
+        
+        if let drop = dropDownViews, openedIndex < drop.count {
+            print("=-=-=-=-=-=-=-=-=")
+            print(frame)
+            print(drop[openedIndex].frame)
+        }
+    }
+    
     internal func initViews() {
         self.clipsToBounds = true
         self.alwaysOnIndex = []
@@ -471,7 +527,7 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
         }
         
         
-        self.bottomLine = UIView(frame: CGRect(x: 0, y: CGFloat(menuHeight), width: self.frame.width, height: YNDropDownMenu.kScreenScaleHeight))
+        self.bottomLine = UIView(frame: CGRect(x: 0, y: CGFloat(menuHeight - YNDropDownMenu.kScreenScaleHeight), width: self.frame.width, height: YNDropDownMenu.kScreenScaleHeight))
         self.bottomLine.backgroundColor = UIColor(red: 200.0/255, green: 199.0/255, blue: 204.0/255, alpha: 1.0)
         self.bottomLine.isHidden = false
         self.addSubview(self.bottomLine)
@@ -488,7 +544,8 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
         
         
         let blurEffect = UIBlurEffect(style: blurEffectStyle)
-        self.blurEffectView = UIVisualEffectView(effect: blurEffect)
+        self.blurEffectView = UIView()//UIVisualEffectView(effect: blurEffect)
+        self.blurEffectView?.backgroundColor = UIColor.black
         self.blurEffectView?.alpha = 0
         
 //        self.blurEffectView?.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: UIScreen.main.bounds.size.height - self.frame.origin.y)
