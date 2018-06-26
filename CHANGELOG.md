@@ -1,4 +1,20 @@
 # Updates
+## [v3.0.0](https://github.com/younatics/YNDropDownMenu/releases/tag/3.0.0)
+* Upgrade for Swift 4.0
+
+## [v2.3.3](https://github.com/younatics/YNDropDownMenu/releases/tag/2.3.3)
+* Bug fixed
+* Add setBackground Function
+
+## [v2.3.2](https://github.com/younatics/YNDropDownMenu/releases/tag/2.3.2)
+* Bug fixed
+
+## [v2.3.1](https://github.com/younatics/YNDropDownMenu/releases/tag/2.3.1)
+* Minor UI Update
+
+## [v2.3.0](https://github.com/younatics/YNDropDownMenu/releases/tag/2.3.0)
+* Make Framework
+
 ## [v2.2.1](https://github.com/younatics/YNDropDownMenu/releases/tag/2.2.1)
 * Changed M_PI to double.pi
 * Support Upside Down
