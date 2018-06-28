@@ -70,7 +70,7 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
     open var blurEffectViewAlpha:CGFloat = 1.0
     
     /// Blur effect style in background view
-    open var blurEffectStyle:UIBlurEffectStyle = .dark
+    open var blurEffectStyle:UIBlurEffect.Style = .dark
     
     /// Make background blur view enabled
     open var backgroundBlurEnabled = true
@@ -361,7 +361,7 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
     
     open func selectMenuIndex(index: Int) {
         if let sender = dropDownButtons?[index] {
-            sender.sendActions(for: UIControlEvents.touchUpInside)
+            sender.sendActions(for: UIControl.Event.touchUpInside)
         }
     }
     
@@ -391,7 +391,7 @@ open class YNDropDownMenu: UIView, YNDropDownDelegate {
         
         if dropDownView.superview == nil {
             self.addSubview(dropDownView)
-            self.sendSubview(toBack: dropDownView)
+            self.sendSubviewToBack(dropDownView)
         }
         
 //        print(subviews)

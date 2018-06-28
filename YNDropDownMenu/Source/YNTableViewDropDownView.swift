@@ -94,7 +94,7 @@ extension YNTableViewDropDownView: UITableViewDelegate, UITableViewDataSource {
         cell.textLabel?.font = UIFont.systemFont(ofSize: 12)
         cell.textLabel?.text = data[indexPath.row]
         
-        cell.selectionStyle = UITableViewCellSelectionStyle.none
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
         
 //        cell.textLabel?.textAlignment = NSTextAlignment.center
         
